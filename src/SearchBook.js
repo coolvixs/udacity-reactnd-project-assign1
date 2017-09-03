@@ -48,7 +48,7 @@ class SearchBook extends Component {
     }
 
     findBookInShelf = book => {
-        let BookFound = {
+        let bookFound = {
             id: -1,
             shelf: ''
         }
@@ -58,40 +58,40 @@ class SearchBook extends Component {
             .concat(this.selectedBooks['read'])
 
       const bookIndex = allSelectedBooks.findIndex(item => item.id === book.bookReference.id)
-      bookFounded.id = bookIndex
+      bookFound.id = bookIndex
       
       if (bookIndex >= 0) {
-          bookFounded.shelf = allSelectedBooks[bookIndex].shelf
+          bookFound.shelf = allSelectedBooks[bookIndex].shelf
       }
-      return bookFounded
+      return bookFound
     }
 
     onChangeShelf = (targetShelfName, book) => {
-        let bookFounded = this.findBookInShelf(book)
-        if (targetShelfName != 'none') {
+        let bookFound = this.findBookInShelf(book)
+        if (targetShelfName !== 'none') {
             let tempShelfBooks = this.selectedBooks[targetShelfName]
-            if (bookFounded.id >= 0) {
-                if (bookFounded.shelf !== targetShelfName) {
+            if (bookFound.id >= 0) {
+                if (bookFound.shelf !== targetShelfName) {
                     tempShelfBooks.push(Object.assign({}, book.bookReference, { 
                         shelf: targetShelfName 
                     }))
-                    let tempOldBookShelf = this.selectedBooks[bookFounded.shelf]
+                    let tempOldBookShelf = this.selectedBooks[bookFound.shelf]
                     const oldIndexBook = tempOldBookShelf.findIndex(item => item.id === book.bookReference.id)
                     tempOldBookShelf.splice(oldIndexBook, 1)
-                    this.selectedBooks[bookFounded.shelf] = tempOldBookShelf
+                    this.selectedBooks[bookFound.shelf] = tempOldBookShelf
                 }
             } else {
-                tempShelfBooks.push(Object.assign({}, bookReference, {
+                tempShelfBooks.push(Object.assign({}, book.bookReference, {
                     shelf: targetShelfName
                 }))
             }
-            thi.selectedBooks[targetShelfName] = tempShelfBooks
+            this.selectedBooks[targetShelfName] = tempShelfBooks
         } else {
-            if (bookFounded.id >= 0) {
-                let tempOldBookShelf = this.selectedBooks[bookFounded.shelf]
+            if (bookFound.id >= 0) {
+                let tempOldBookShelf = this.selectedBooks[bookFound.shelf]
                 const oldIndexBook = tempOldBookShelf.findIndex(item => item.id === book.bookReference.id)
                 tempOldBookShelf.splice(oldIndexBook, 1)
-                this.selectedBooks[bookFounded.shelf] = tempOldBookShelf
+                this.selectedBooks[bookFound.shelf] = tempOldBookShelf
             }
         }
     }
@@ -104,22 +104,17 @@ class SearchBook extends Component {
         return (
             <div className="search-books">
             <div className="search-books-bar">
-              <a className="close-search" onClick={() => this.setState({ showSearchPage: false })}>Close</a>
+              <a className="close-search" onClick={this.onChangeRoute}>Close</a>
               <div className="search-books-input-wrapper">
-                {/* 
-                  NOTES: The search from BooksAPI is limited to a particular set of search terms.
-                  You can find these search terms here:
-                  https://github.com/udacity/reactnd-project-myreads-starter/blob/master/SEARCH_TERMS.md
-                  
-                  However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
-                  you don't find a specific author or title. Every search is limited by search terms.
-                */}
-                <input type="text" placeholder="Search by title or author"/>
-                
+                <input type="text" placeholder="Search by title or author" value={this.state.value} onKeyUp={event => this.onChangeSearchQuery(event)} ref={(input) => {this.inputSearch = input; }} />
               </div>
             </div>
             <div className="search-books-results">
-              <ol className="books-grid"></ol>
+              <ol className="books-grid">
+                  {this.state.resultsBooks.map((singleBook, index) => (
+                      <Book key={index} {...singleBook} onChangeShelf={this.onChangeShelf} />
+                  ))}
+              </ol>
             </div>
           </div>
         )
