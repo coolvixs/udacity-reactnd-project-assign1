@@ -97,14 +97,14 @@ class SearchBook extends Component {
     }
 
     onChangeRoute = () => {
-        this.props.onAddBookShelf(this.selectedBooks)
+        this.props.onAddBookShelfs(this.selectedBooks)
     }
 
     render() {
         return (
             <div className="search-books">
             <div className="search-books-bar">
-              <a className="close-search" onClick={this.onChangeRoute}>Close</a>
+              <a className="close-search" style={{ cursor: 'pointer' }} onClick={this.onChangeRoute}>Close</a>
               <div className="search-books-input-wrapper">
                 <input type="text" placeholder="Search by title or author" value={this.state.value} onKeyUp={event => this.onChangeSearchQuery(event)} ref={(input) => {this.inputSearch = input; }} />
               </div>
