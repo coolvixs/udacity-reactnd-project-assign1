@@ -24,7 +24,7 @@ class BooksApp extends React.Component {
   onChangeShelf = (targetShelfName, book) => {
     const orgShelfName = book.bookRefernce.currentBookShelf
     if (orgShelfName !== targetShelfName && targetShelfName !== 'none') {
-      let orgShelf = object.assign({}, this.state[orgShelfName])
+      let orgShelf = Object.assign({}, this.state[orgShelfName])
       orgShelf.shelfBooks = orgShelf.shelfBooks.filter(bookItem => bookItem.id !== book.bookRefernce.id)
       let targetShelf = this.state[targetShelfName]
       targetShelf.shelfBooks.push(Object.assign({}, book.bookRefernce, {
@@ -77,7 +77,7 @@ class BooksApp extends React.Component {
       selectedBooks[property].forEach(newBook => {
         BooksAPI.update(newBook, property).then(() => console.log("Book shelf updated."))
       })
-      this.updateShelfState(selectedBooks[property].concat(thi.state[property].shelfBooks), property)
+      this.updateShelfState(selectedBooks[property].concat(this.state[property].shelfBooks), property)
     })
   }
 
